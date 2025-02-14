@@ -13,11 +13,13 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       CERT_URL: ${{ secrets.CERT_URL }}
       PRIVATE_KEY_URL: ${{ secrets.PRIVATE_KEY_URL }}
-      APPLY_DOMAINS: ${{ secrets.APPLY_DOMAINS }}
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        # 确保拉取最新配置
+        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v4
