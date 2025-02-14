@@ -1,0 +1,33 @@
+name: Certificate Auto Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天UTC时间0点运行
+  workflow_dispatch:      # 允许手动触发
+
+jobs:
+  update-cert:
+    runs-on: ubuntu-latest
+    env:
+      ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      CERT_URL: ${{ secrets.CERT_URL }}
+      PRIVATE_KEY_URL: ${{ secrets.PRIVATE_KEY_URL }}
+      APPLY_DOMAINS: ${{ secrets.APPLY_DOMAINS }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests cryptography
+
+    - name: Run cert update
+      run: python cert-update.py
