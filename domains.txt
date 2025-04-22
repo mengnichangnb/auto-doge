@@ -1,3 +1,6 @@
 # 每行一个域名，空行和#开头的行会被忽略
 www.yedao.vip
 alist.yedao.vip
+tc.yedao.vip
+blog.yedao.vip
+
