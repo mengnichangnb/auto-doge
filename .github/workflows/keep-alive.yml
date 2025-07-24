@@ -1,35 +1,35 @@
 name: Repository Keep Alive
 
 on:
-schedule:
-- cron: '0 0 * * 0' # 每周日午夜（UTC时间）执行一次
-workflow_dispatch: # 允许手动触发
+  schedule:
+    - cron: '0 0 * * 0'  # 每周日午夜（UTC时间）执行一次
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
-keep-alive:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout repository
-uses: actions/checkout@v4
-with:
-fetch-depth: 0 # 获取完整的提交历史
-
-- name: Generate keep-alive timestamp
-id: timestamp
-run: |
-echo "current_date=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
-echo "KEEP_ALIVE > $(date +'%Y-%m-%d %H:%M:%S')" > .github/keep-alive.txt
-
-- name: 提交更改
-run: |
-git config user.name "GitHub Action"
-git config user.email "action@github.com"
-git add .github/keep-alive.txt
-git commit -m "🤖 Auto: Keep repository active (${{ env.current_date }})" || echo "No changes to commit"
-
-- name: Push changes
-uses: ad-m/github-push-action@v0.8.0
-with:
-github_token: ${{ secrets.GITHUB_TOKEN }}
-branch: ${{ github.ref_name }}
-force: false
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整的提交历史
+      
+      - name: Generate keep-alive timestamp
+        id: timestamp
+        run: |
+          echo "current_date=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+          echo "KEEP_ALIVE > $(date +'%Y-%m-%d %H:%M:%S')" > .github/keep-alive.txt
+      
+      - name: Commit changes
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add .github/keep-alive.txt
+          git commit -m "🤖 Auto: Keep repository active (${{ env.current_date }})" || echo "No changes to commit"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
+          force: false
