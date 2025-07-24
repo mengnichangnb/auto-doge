@@ -20,7 +20,7 @@ run: |
 echo "current_date=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
 echo "KEEP_ALIVE > $(date +'%Y-%m-%d %H:%M:%S')" > .github/keep-alive.txt
 
-- name: Commit changes
+- name: 提交更改
 run: |
 git config user.name "GitHub Action"
 git config user.email "action@github.com"
